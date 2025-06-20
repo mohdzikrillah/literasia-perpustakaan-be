@@ -9,6 +9,6 @@ class Author extends Model
     protected $table = 'authors';
 
     protected $fillable = [
-        'name', 'authors_avilable'
+        'name', 'authors_history'
     ];
 }

@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\Validator;
 class BorrowingController extends Controller
 {
     public function index() {
-        $borrowing=Borrowing::with('book', 'user')->get();
 
+        $user = auth()->guard('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                "success" => false,
+                "message" => "Unauthorized: token tidak valid atau tidak dikirim"
+            ], 401);
+        }
+        
+        $borrowing=Borrowing::with('book', 'user')->get();
 
         if($borrowing->isEmpty()){
             return response()->json([
-                "success" => true,
+                "success" => false,
                 "messege" => "resource data not found !"
-            ], 200);
+            ], 401);
         }
 
 
@@ -47,15 +56,15 @@ class BorrowingController extends Controller
         $book = Book::findOrFail($request->book_id);
 
         // Cek stok
-        if ($book->stock < $request->quantity) {
+        if ($book->available_stock < $request->lostOfBook) {
             return response()->json([
                 'success' => false,
-                'message' => 'Stok tidak mencukupi. Tersedia hanya ' . $book->stock . ' buku.'
+                'message' => 'Stok tidak mencukupi. Tersedia hanya ' . $book->available_stock . ' buku.'
             ], 400);
         }
 
         // Kurangi stok buku
-        $book->stock -= $request->quantity;
+        $book->available_stock -= $request->lostOfBook;
         $book->save();
 
 
@@ -107,6 +116,7 @@ class BorrowingController extends Controller
         $validator = Validator::make($request->all(),[
             'user_id' => 'required|integer|exists:users,id',
             'book_id' => 'required|integer|exists:books,id',
+            'lostOfBook' => 'required|numeric|min:1'
         ]);
 
         if($validator->fails()){
@@ -119,6 +129,7 @@ class BorrowingController extends Controller
         $data = [
             "user_id" => $request->user_id,
             "book_id" => $request->book_id,
+            "lostOfBook" => $request->lostOfBook
         ];
 
         //4, update data

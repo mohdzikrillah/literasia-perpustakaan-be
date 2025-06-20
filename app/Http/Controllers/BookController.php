@@ -23,7 +23,7 @@ class BookController extends Controller
             "success"=> true,
             "messege" => "Get all resource",
             "data" => $books,
-        ], 300);
+        ], 200);
     }
     public function store(Request $request){
         //1 validator
@@ -46,7 +46,7 @@ class BookController extends Controller
         //3. upload image
         $image = $request->file("book_cover");
         $image ->store('books', 'public');
-        
+
         //4. insert data
         $book = Book::create([
             "title" => $request->title,
@@ -107,7 +107,7 @@ class BookController extends Controller
             "message" => $validator->errors()
         ], 422);
         }
-        
+
         //3 siapkan data yang mau diupdate
         $data= [
             "title" => $request->title,

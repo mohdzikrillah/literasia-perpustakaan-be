@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\Returns;
 use Carbon\Carbon;
@@ -20,7 +21,6 @@ class ReturnController extends Controller
             ], 200);
         }
 
-
         return response()->json([
             "success" => true,
             "messege" => "Get all resource",
@@ -32,13 +32,12 @@ class ReturnController extends Controller
         //1. validator
         $validator = Validator::make($request->all(),[
             'borrowing_id' => 'required|integer|exists:borrowings,id',
-            "book_condition" => "nullable|string"
         ]);
         //2. check validator eror
         if ($validator->fails()){
             return response()->json([
                 "success"=> false,
-                "messege" => $validator->errors()
+                "message" => $validator->errors()
             ], 422);
         };
 
@@ -46,26 +45,28 @@ class ReturnController extends Controller
         $borrowing = Borrowing::findOrFail($request->borrowing_id);
 
         $borrowingDate = Carbon::parse($borrowing->borrowing_date);
-        $returnDate = Carbon::now(); 
+        $returnDate = Carbon::now();
         $selisihHari = $borrowingDate->diffInDays($returnDate, false);
 
         // Logika status
         if ($selisihHari > 7) {
             $status = 'telat ' . floor($selisihHari - 7) . ' hari';
-        } elseif ($selisihHari < 7) {
-            $status = 'tersisa ' . floor(7 - $selisihHari) . ' hari';
         } else {
-            $status = 'dikembalikan tepat waktu';
+            $status = 'dikembalikan';
         }
 
         // Update status peminjaman
         $borrowing->status = $status;
         $borrowing->save();
 
+        // kembalikan junlah peminjaman ke stock buku
+        $book = Book::findOrFail($borrowing->book_id);
+        $book->available_stock += $borrowing->lostOfBook;
+        $book->save();
+
         // Simpan data pengembalian
         $return = Returns::create([
             "borrowing_id" => $request->borrowing_id,
-            "book_condition" => $request->book_condition,
             "return_date" => $returnDate,
         ]);
 

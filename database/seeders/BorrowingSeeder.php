@@ -16,7 +16,7 @@ class BorrowingSeeder extends Seeder
     {
         Borrowing::create([
             'user_id'=> 1,
-            'book_id' => 1,
+            'book_id' => 2,
             'lostOfBook' => 1,
             'borrowing_date' => Carbon::now()
         ]);

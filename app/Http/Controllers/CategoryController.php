@@ -40,7 +40,7 @@ class CategoryController extends Controller
         $category = Category::create([
             "name" => $request->name,
             "description" => $request->description
-            
+
         ]);
 
         return response()->json([
@@ -81,7 +81,7 @@ class CategoryController extends Controller
         //2. validator
         $validator = Validator::make($request->all(),[
             "name" => "required|string|max:225",
-            "description" => "required|string|max:455"
+            "description" => "required|string|max:1000"
         ]);
 
         if($validator->fails()){
@@ -105,7 +105,7 @@ class CategoryController extends Controller
         ], 200);
     }
      //delete
-     public function destroy(string $id){
+    public function destroy(string $id){
         $category = Category::find($id);
         if(!$category){
             return response()->json([

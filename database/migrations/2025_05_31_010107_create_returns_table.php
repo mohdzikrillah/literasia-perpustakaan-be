@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('borrowing_id')->constrained('borrowings')->onDelete('cascade');
             $table->timestamp('borrowing_date') ->useCurrent();
             $table->timestamp('return_date') ->useCurrent();
-            $table->text('book_condition');
             $table->timestamps();
         });
     }

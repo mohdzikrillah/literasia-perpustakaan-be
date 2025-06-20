@@ -18,7 +18,7 @@ class ReturnSeeder extends Seeder
         Returns::create([
             'borrowing_id' => 2,
             'borrowing_date' => Carbon::now(),
-            'book_condition' => 'tidak ada kerusakan'
         ]);
     }
 }
+

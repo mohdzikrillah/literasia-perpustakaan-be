@@ -27,6 +27,7 @@ class AuthController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'role' => 'member'
         ]);
 
         //4. cek keberhasilan
@@ -34,7 +35,7 @@ class AuthController extends Controller
             return response()->json([
                 'succes' => true,
                 'message' => 'user created successfully',
-                'data' => $user 
+                'data' => $user
             ],201);
         }
 
@@ -129,7 +130,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => $request->role
-            
+
         ]);
 
         return response()->json([
@@ -171,7 +172,6 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(),[
             "username" => "required|string|max:255",
             "email" => "required|email|max:455",
-            "password" => "required|password|min:8",
             "role" => "required|string|in:admin,member|max:100"
         ]);
 
@@ -185,7 +185,6 @@ class AuthController extends Controller
         $data = [
             'username' => $request->username,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
             'role' => $request->role
         ];
 

@@ -30,7 +30,7 @@ class AuthorController extends Controller
         //1. validator
         $validator = Validator::make($request->all(),[
             "name" => "required|string|max:255",
-            "authors_history" => "required|string|max:255"
+            "authors_history" => "required|string|max:1000"
         ]);
         //2. check validator eror
         if ($validator->fails()){
@@ -50,7 +50,7 @@ class AuthorController extends Controller
             "success" => true,
             "messege" => "resource created",
             "data" => $authors
-        ], 201);
+        ], 200);
     }
 
     //show
@@ -84,7 +84,7 @@ class AuthorController extends Controller
         //2. validator
         $validator = Validator::make($request->all(),[
             "name" => "required|string|max:225",
-            "authors_history" => "required|string|max:225"
+            "authors_history" => "required|string|max:1000"
         ]);
 
         if($validator->fails()){

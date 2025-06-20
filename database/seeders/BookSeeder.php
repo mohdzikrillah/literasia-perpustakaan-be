@@ -16,7 +16,7 @@ class BookSeeder extends Seeder
         Book::create([
             'title' => 'Mengaji Bukit Mengeja Danau',
             'synopsis' => 'Kumpulan puisi ini merupakan hasil interaksi D. Zawawi Imron dengan alam dan budaya yang berbeda, yang menunjukkan bahwa interaksi tersebut tidak menghambat seorang penyair untuk berkarya.',
-            'book_cover' => 'cover-laravel-pemula.jpg',
+            'book_cover' => 'Mengaji-Bukit.jpg',
             'author_id' => 1,
             'category_id' => 1,
             'available_stock' => 10,
