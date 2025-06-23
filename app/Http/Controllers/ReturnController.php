@@ -50,10 +50,12 @@ class ReturnController extends Controller
 
         // Logika status
         if ($selisihHari > 7) {
-            $status = 'telat ' . floor($selisihHari - 7) . ' hari';
-        } else {
-            $status = 'dikembalikan';
-        }
+        $jumlahHariTelat = floor($selisihHari - 7);
+        $denda = $jumlahHariTelat * 5000;
+        $status = 'telat ' . $jumlahHariTelat . ' hari - Denda Rp' . number_format($denda, 0, ',', '.');
+    } else {
+        $status = 'dikembalikan';
+}
 
         // Update status peminjaman
         $borrowing->status = $status;

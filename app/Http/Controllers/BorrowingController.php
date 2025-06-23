@@ -19,7 +19,7 @@ class BorrowingController extends Controller
                 "message" => "Unauthorized: token tidak valid atau tidak dikirim"
             ], 401);
         }
-        
+
         $borrowing=Borrowing::with('book', 'user')->get();
 
         if($borrowing->isEmpty()){
@@ -42,7 +42,6 @@ class BorrowingController extends Controller
         $validator = Validator::make($request->all(),[
             'user_id' => 'required|integer|exists:users,id',
             'book_id' => 'required|integer|exists:books,id',
-            'lostOfBook' => 'required|numeric|min:1'
         ]);
         //2. check validator eror
         if ($validator->fails()){
@@ -72,7 +71,7 @@ class BorrowingController extends Controller
         $borrowing = Borrowing::create([
             "user_id" => $request->user_id,
             "book_id" => $request->book_id,
-            "lostOfBook" => $request->lostOfBook,
+            "lostOfBook" => 1,
             "borrowing_date" => now(),
             "status" => "dipinjam"
         ]);
@@ -115,8 +114,7 @@ class BorrowingController extends Controller
         //2. validator
         $validator = Validator::make($request->all(),[
             'user_id' => 'required|integer|exists:users,id',
-            'book_id' => 'required|integer|exists:books,id',
-            'lostOfBook' => 'required|numeric|min:1'
+            'book_id' => 'required|integer|exists:books,id'
         ]);
 
         if($validator->fails()){
@@ -129,7 +127,6 @@ class BorrowingController extends Controller
         $data = [
             "user_id" => $request->user_id,
             "book_id" => $request->book_id,
-            "lostOfBook" => $request->lostOfBook
         ];
 
         //4, update data
